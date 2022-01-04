@@ -1,0 +1,75 @@
+{
+  "days": [
+    {
+      "id": 1,
+      "day": 1
+    },
+    {
+      "id": 2,
+      "day": 2
+    },
+    {
+      "id": 3,
+      "day": 3
+    },
+    {
+      "day": 4,
+      "id": 4
+    },
+    {
+      "day": 5,
+      "id": 5
+    }
+  ],
+  "words": [
+    {
+      "id": 2,
+      "day": 1,
+      "eng": "apple",
+      "kor": "사과",
+      "isDone": true
+    },
+    {
+      "id": 3,
+      "day": 2,
+      "eng": "car",
+      "kor": "자동차",
+      "isDone": true
+    },
+    {
+      "id": 5,
+      "day": 3,
+      "eng": "school",
+      "kor": "학교",
+      "isDone": false
+    },
+    {
+      "day": "2",
+      "eng": "korea",
+      "kor": "한국",
+      "isDone": false,
+      "id": 6
+    },
+    {
+      "day": "3",
+      "eng": "house",
+      "kor": "집",
+      "isDone": false,
+      "id": 7
+    },
+    {
+      "day": "1",
+      "eng": "a",
+      "kor": "ㅁ",
+      "isDone": false,
+      "id": 9
+    },
+    {
+      "day": "4",
+      "eng": "",
+      "kor": "",
+      "isDone": false,
+      "id": 10
+    }
+  ]
+}
