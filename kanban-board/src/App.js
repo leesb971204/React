@@ -8,10 +8,7 @@ const App = () => {
     { id: "1", title: "두번째" },
     { id: "2", title: "세번째" },
     { id: "3", title: "네번째" },
-    {
-      id: "4",
-      title: "다섯번째ddddddddddddddddddddddddddddddddddddddddddddddddd",
-    },
+    { id: "4", title: "다섯번째" },
   ];
 
   const columsList = {
@@ -80,29 +77,51 @@ const App = () => {
     }
   }, []);
 
+  //아이템 생성 함수
+  const addItem = useCallback(() => {
+    const newItem = {
+      id: String(columns.Todo.items.length + 1),
+      title: "New Item",
+    };
+    const copiedItems = [...columns.Todo.items, newItem];
+    setColumns({
+      ...columns,
+      Todo: {
+        name: columns.Todo.name,
+        items: copiedItems,
+      },
+    });
+  }, [columns]);
+
   //아이템 삭제 함수
   const deleteItem = useCallback(
     (key, name, index) => {
       //삭제하고자 하는 아이템이 속해있는 칼럼의 아이템 리스트
-      const updateItems = [...columns[key].items];
-      updateItems.splice(index, 1);
+      const copiedItems = [...columns[key].items];
+      copiedItems.splice(index, 1);
       setColumns({
         ...columns,
         [key]: {
           name: name,
-          items: updateItems,
+          items: copiedItems,
         },
       });
     },
     [columns]
   );
+
   return (
-    <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
-      <DragDropContext
-        onDragEnd={(result) => reorder(result, columns, setColumns)}
+    <div>
+      <button onClick={addItem}>+</button>
+      <div
+        style={{ display: "flex", justifyContent: "center", height: "100%" }}
       >
-        <List columns={columns} deleteItem={deleteItem}></List>
-      </DragDropContext>
+        <DragDropContext
+          onDragEnd={(result) => reorder(result, columns, setColumns)}
+        >
+          <List columns={columns} deleteItem={deleteItem}></List>
+        </DragDropContext>
+      </div>
     </div>
   );
 };
