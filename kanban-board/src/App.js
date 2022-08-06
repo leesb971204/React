@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
-import List1 from "./components/List1";
-import List2 from "./components/List2";
+import List from "./components/List";
 
 const App = () => {
   const items = [
@@ -13,12 +12,12 @@ const App = () => {
   ];
 
   const columsList = {
-    1: {
-      name: "1",
+    Todo: {
+      name: "Todo",
       items: items,
     },
-    2: {
-      name: "2",
+    Done: {
+      name: "Done",
       items: [],
     },
   };
@@ -26,16 +25,23 @@ const App = () => {
 
   //결과 재정렬 함수
   const reorder = useCallback((result, columns, setColumns) => {
-    console.log(result);
+    //범위 밖으로 떨구면 아무것도 안함
     if (!result.destination) return;
+
+    // 다른 컬럼으로 이동시
     if (result.source.droppableId !== result.destination.droppableId) {
-      const sourceColumn = columns[result.source.droppabledId];
-      const destColumn = columns[result.source.droppableId];
+      //출발, 도착 컬럼 정보
+      const sourceColumn = columns[result.source.droppableId];
+      const destColumn = columns[result.destination.droppableId];
+
+      //촐발, 도착 컬럼의 아이템
       const sourceItems = [...sourceColumn.items];
       const destItems = [...destColumn.items];
 
+      //드래그한 item
       const [remove] = sourceItems.splice(result.source.index, 1);
-      destItems.splice(result.source.destination.index, 0, remove);
+      //도착 컬럼 아이템에 삽입
+      destItems.splice(result.destination.index, 0, remove);
 
       setColumns({
         ...columns,
@@ -49,15 +55,29 @@ const App = () => {
         },
       });
     }
+
+    // 같은 컬럼에서 순서만 바꿀 때
+    else {
+      const column = columns[result.source.droppableId];
+      const copiedItems = [...column.items];
+
+      const [remove] = copiedItems.splice(result.source.index, 1);
+      copiedItems.splice(result.destination.index, 0, remove);
+      setColumns({
+        ...columns,
+        [result.source.droppableId]: {
+          ...column,
+          items: copiedItems,
+        },
+      });
+    }
   }, []);
-  console.log(columsList);
   return (
-    <div>
+    <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
       <DragDropContext
         onDragEnd={(result) => reorder(result, columns, setColumns)}
       >
-        <List1 list={columsList[1].items}></List1>
-        <List2 list={columsList[2].items}></List2>
+        <List columns={columns}></List>
       </DragDropContext>
     </div>
   );
