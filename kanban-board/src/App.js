@@ -8,7 +8,10 @@ const App = () => {
     { id: "1", title: "두번째" },
     { id: "2", title: "세번째" },
     { id: "3", title: "네번째" },
-    { id: "4", title: "다섯번째" },
+    {
+      id: "4",
+      title: "다섯번째ddddddddddddddddddddddddddddddddddddddddddddddddd",
+    },
   ];
 
   const columsList = {
@@ -18,6 +21,10 @@ const App = () => {
     },
     Done: {
       name: "Done",
+      items: [],
+    },
+    Hi: {
+      name: "Hi",
       items: [],
     },
   };
@@ -72,12 +79,29 @@ const App = () => {
       });
     }
   }, []);
+
+  //아이템 삭제 함수
+  const deleteItem = useCallback(
+    (key, name, index) => {
+      //삭제하고자 하는 아이템이 속해있는 칼럼의 아이템 리스트
+      const updateItems = [...columns[key].items];
+      updateItems.splice(index, 1);
+      setColumns({
+        ...columns,
+        [key]: {
+          name: name,
+          items: updateItems,
+        },
+      });
+    },
+    [columns]
+  );
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
       <DragDropContext
         onDragEnd={(result) => reorder(result, columns, setColumns)}
       >
-        <List columns={columns}></List>
+        <List columns={columns} deleteItem={deleteItem}></List>
       </DragDropContext>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 
-const List1 = ({ columns }) => {
+const List = ({ columns, deleteItem }) => {
   return Object.entries(columns).map(([key, value]) => {
     return (
       <div key={key} style={{ margin: "8px" }}>
@@ -33,19 +33,14 @@ const List1 = ({ columns }) => {
                           {...provided.dragHandleProps}
                           {...provided.draggableProps}
                           ref={provided.innerRef}
-                          style={{
-                            userSelect: "none",
-                            padding: 16,
-                            margin: "0 0 8px 0",
-                            minHeight: "50px",
-                            backgroundColor: snapshot.isDragging
-                              ? "#263B4A"
-                              : "#456C86",
-                            color: "white",
-                            ...provided.draggableProps.style,
-                          }}
+                          // style={{ wordBreak: "break-all" }}
                         >
                           {item.title}
+                          <button
+                            onClick={() => deleteItem(key, value.name, index)}
+                          >
+                            X
+                          </button>
                         </div>
                       )}
                     </Draggable>
@@ -61,4 +56,4 @@ const List1 = ({ columns }) => {
   });
 };
 
-export default List1;
+export default List;
