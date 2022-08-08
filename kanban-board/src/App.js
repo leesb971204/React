@@ -1,14 +1,15 @@
 import React, { useCallback, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
+import { v4 as uuidv4 } from "uuid";
 import List from "./components/List";
 
 const App = () => {
   const items = [
-    { id: "0", title: "첫번째" },
-    { id: "1", title: "두번째" },
-    { id: "2", title: "세번째" },
-    { id: "3", title: "네번째" },
-    { id: "4", title: "다섯번째" },
+    { id: uuidv4(), title: "첫번째", text: "내용" },
+    { id: uuidv4(), title: "두번째", text: "내용" },
+    { id: uuidv4(), title: "세번째", text: "내용" },
+    { id: uuidv4(), title: "네번째", text: "내용" },
+    { id: uuidv4(), title: "다섯번째", text: "내용" },
   ];
 
   const columsList = {
@@ -16,12 +17,12 @@ const App = () => {
       name: "Todo",
       items: items,
     },
-    Done: {
-      name: "Done",
+    InProgress: {
+      name: "InProgress",
       items: [],
     },
-    Hi: {
-      name: "Hi",
+    Done: {
+      name: "Done",
       items: [],
     },
   };
@@ -80,8 +81,9 @@ const App = () => {
   //아이템 생성 함수
   const addItem = useCallback(() => {
     const newItem = {
-      id: String(columns.Todo.items.length + 1),
+      id: uuidv4(),
       title: "New Item",
+      text: "Text",
     };
     const copiedItems = [...columns.Todo.items, newItem];
     setColumns({
@@ -91,6 +93,7 @@ const App = () => {
         items: copiedItems,
       },
     });
+    console.log(columns);
   }, [columns]);
 
   //아이템 삭제 함수

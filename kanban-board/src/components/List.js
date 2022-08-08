@@ -1,5 +1,22 @@
 import React from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import styled from "styled-components";
+
+const DroppableStyles = styled.div`
+  background: ${(props) =>
+    props.snapshot.isDraggingOver ? "lightblue" : "lightgrey"};
+  padding: 4px;
+  width: 250px;
+  min-height: 500px;
+`;
+const DraggableStyles = styled.div`
+  background: ${(props) => (props.snapshot.isDragging ? "#263B4A" : "#456C86")};
+  user-select: none;
+  padding: 16px;
+  margin: 0 0 8px 0;
+  min-height: 50px;
+  color: white;
+`;
 
 const List = ({ columns, deleteItem }) => {
   return Object.entries(columns).map(([key, value]) => {
@@ -10,17 +27,10 @@ const List = ({ columns, deleteItem }) => {
           <Droppable droppableId={key}>
             {(provided, snapshot) => {
               return (
-                <div
+                <DroppableStyles
+                  snapshot={snapshot}
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  style={{
-                    background: snapshot.isDraggingOver
-                      ? "lightblue"
-                      : "lightgrey",
-                    padding: 4,
-                    width: 250,
-                    minHeight: 500,
-                  }}
                 >
                   {value.items.map((item, index) => (
                     <Draggable
@@ -29,24 +39,38 @@ const List = ({ columns, deleteItem }) => {
                       index={index}
                     >
                       {(provided) => (
-                        <div
+                        <DraggableStyles
                           {...provided.dragHandleProps}
                           {...provided.draggableProps}
                           ref={provided.innerRef}
-                          // style={{ wordBreak: "break-all" }}
+                          snapshot={snapshot}
+                          // propsStyle={...provided.draggableProps.style}
+                          // style={{
+                          //   userSelect: "none",
+                          //   padding: 16,
+                          //   margin: "0 0 8px 0",
+                          //   minHeight: "50px",
+                          //   backgroundColor: snapshot.isDragging
+                          //     ? "#263B4A"
+                          //     : "#456C86",
+                          //   color: "white",
+                          //   ...provided.draggableProps.style,
+                          // }}
                         >
-                          {item.title}
+                          <div>{item.title}</div>
+                          {item.text}
                           <button
                             onClick={() => deleteItem(key, value.name, index)}
+                            style={{ float: "right" }}
                           >
                             X
                           </button>
-                        </div>
+                        </DraggableStyles>
                       )}
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                </div>
+                </DroppableStyles>
               );
             }}
           </Droppable>
