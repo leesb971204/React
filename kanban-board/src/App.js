@@ -13,16 +13,20 @@ const App = () => {
   ];
 
   const columsList = {
-    Todo: {
+    [uuidv4()]: {
       name: "Todo",
       items: items,
     },
-    InProgress: {
-      name: "InProgress",
+    [uuidv4()]: {
+      name: "In Progress",
       items: [],
     },
-    Done: {
+    [uuidv4()]: {
       name: "Done",
+      items: [],
+    },
+    [uuidv4()]: {
+      name: "Notes & Reference",
       items: [],
     },
   };
@@ -79,22 +83,26 @@ const App = () => {
   }, []);
 
   //아이템 생성 함수
-  const addItem = useCallback(() => {
-    const newItem = {
-      id: uuidv4(),
-      title: "New Item",
-      text: "Text",
-    };
-    const copiedItems = [...columns.Todo.items, newItem];
-    setColumns({
-      ...columns,
-      Todo: {
-        name: columns.Todo.name,
-        items: copiedItems,
-      },
-    });
-    console.log(columns);
-  }, [columns]);
+  const addItem = useCallback(
+    (key) => {
+      const newItem = {
+        id: uuidv4(),
+        title: "New Item",
+        text: "Text",
+      };
+      const copiedItems = [...columns[key].items, newItem];
+      setColumns({
+        ...columns,
+        [key]: {
+          ...columns,
+          name: columns[key].name,
+          items: copiedItems,
+        },
+      });
+      console.log(columns);
+    },
+    [columns]
+  );
 
   //아이템 삭제 함수
   const deleteItem = useCallback(
@@ -115,14 +123,17 @@ const App = () => {
 
   return (
     <div>
-      <button onClick={addItem}>+</button>
       <div
         style={{ display: "flex", justifyContent: "center", height: "100%" }}
       >
         <DragDropContext
           onDragEnd={(result) => reorder(result, columns, setColumns)}
         >
-          <List columns={columns} deleteItem={deleteItem}></List>
+          <List
+            columns={columns}
+            addItem={addItem}
+            deleteItem={deleteItem}
+          ></List>
         </DragDropContext>
       </div>
     </div>

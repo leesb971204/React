@@ -17,12 +17,19 @@ const DraggableStyles = styled.div`
   min-height: 50px;
   color: white;
 `;
+const AddItemButton = styled.button`
+  float: right;
+`;
 
-const List = ({ columns, deleteItem }) => {
+const List = ({ columns, addItem, deleteItem }) => {
   return Object.entries(columns).map(([key, value]) => {
     return (
       <div key={key} style={{ margin: "8px" }}>
-        <h2>{value.name}</h2>
+        <h2>
+          {value.name}
+          <AddItemButton onClick={() => addItem(key)}>+</AddItemButton>
+        </h2>
+
         <div>
           <Droppable droppableId={key}>
             {(provided, snapshot) => {
@@ -44,18 +51,6 @@ const List = ({ columns, deleteItem }) => {
                           {...provided.draggableProps}
                           ref={provided.innerRef}
                           snapshot={snapshot}
-                          // propsStyle={...provided.draggableProps.style}
-                          // style={{
-                          //   userSelect: "none",
-                          //   padding: 16,
-                          //   margin: "0 0 8px 0",
-                          //   minHeight: "50px",
-                          //   backgroundColor: snapshot.isDragging
-                          //     ? "#263B4A"
-                          //     : "#456C86",
-                          //   color: "white",
-                          //   ...provided.draggableProps.style,
-                          // }}
                         >
                           <div>{item.title}</div>
                           {item.text}
