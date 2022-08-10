@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+import GlobalStyle from "./styles/GlobalStyle";
 import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import List from "./components/List";
@@ -122,7 +123,8 @@ const App = () => {
   );
 
   return (
-    <div>
+    <>
+      <GlobalStyle />
       <div
         style={{ display: "flex", justifyContent: "center", height: "100%" }}
       >
@@ -136,7 +138,7 @@ const App = () => {
           ></List>
         </DragDropContext>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,40 +1,20 @@
 import React from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import styled from "styled-components";
-
-const DroppableStyles = styled.div`
-  background: ${(props) =>
-    props.snapshot.isDraggingOver ? "lightblue" : "lightgrey"};
-  padding: 4px;
-  width: 250px;
-  min-height: 500px;
-`;
-const DraggableStyles = styled.div`
-  background: ${(props) => (props.snapshot.isDragging ? "#263B4A" : "#456C86")};
-  user-select: none;
-  padding: 16px;
-  margin: 0 0 8px 0;
-  min-height: 50px;
-  color: white;
-`;
-const AddItemButton = styled.button`
-  float: right;
-`;
+import * as S from "./Style";
 
 const List = ({ columns, addItem, deleteItem }) => {
   return Object.entries(columns).map(([key, value]) => {
     return (
-      <div key={key} style={{ margin: "8px" }}>
-        <h2>
-          {value.name}
-          <AddItemButton onClick={() => addItem(key)}>+</AddItemButton>
-        </h2>
-
-        <div>
+      <S.Container key={key}>
+        <header>
+          <S.H2>{value.name}</S.H2>
+          <S.AddButton onClick={() => addItem(key)}>+</S.AddButton>
+        </header>
+        <main>
           <Droppable droppableId={key}>
             {(provided, snapshot) => {
               return (
-                <DroppableStyles
+                <S.DroppableStyles
                   snapshot={snapshot}
                   {...provided.droppableProps}
                   ref={provided.innerRef}
@@ -46,7 +26,7 @@ const List = ({ columns, addItem, deleteItem }) => {
                       index={index}
                     >
                       {(provided) => (
-                        <DraggableStyles
+                        <S.DraggableStyles
                           {...provided.dragHandleProps}
                           {...provided.draggableProps}
                           ref={provided.innerRef}
@@ -60,17 +40,17 @@ const List = ({ columns, addItem, deleteItem }) => {
                           >
                             X
                           </button>
-                        </DraggableStyles>
+                        </S.DraggableStyles>
                       )}
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                </DroppableStyles>
+                </S.DroppableStyles>
               );
             }}
           </Droppable>
-        </div>
-      </div>
+        </main>
+      </S.Container>
     );
   });
 };
