@@ -35,7 +35,7 @@ const List = ({ columns, addItem, deleteItem }) => {
                           <div>{item.title}</div>
                           {item.text}
                           <button
-                            onClick={() => deleteItem(key, value.name, index)}
+                            onClick={() => deleteItem(key, index)}
                             style={{ float: "right" }}
                           >
                             X

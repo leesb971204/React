@@ -12,8 +12,8 @@ const io = socketIo(server, {
 });
 
 io.on("connection", (socket) => {
-  socket.on("message", (key, name, copiedItems) => {
-    io.emit("message", key, name, copiedItems);
+  socket.on("message", (key, copiedItems) => {
+    io.emit("message", key, copiedItems);
   });
 });
 
