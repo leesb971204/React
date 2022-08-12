@@ -8,7 +8,7 @@ const List = ({ columns, addItem, deleteItem }) => {
       <S.Container key={key}>
         <header>
           <S.H2>{value.name}</S.H2>
-          <S.AddButton onClick={() => addItem(key)}>+</S.AddButton>
+          <S.Button onClick={() => addItem(key)}>+</S.Button>
         </header>
         <main>
           <Droppable droppableId={key}>
@@ -34,12 +34,9 @@ const List = ({ columns, addItem, deleteItem }) => {
                         >
                           <div>{item.title}</div>
                           {item.text}
-                          <button
-                            onClick={() => deleteItem(key, index)}
-                            style={{ float: "right" }}
-                          >
+                          <S.Button onClick={() => deleteItem(key, index)}>
                             X
-                          </button>
+                          </S.Button>
                         </S.DraggableStyles>
                       )}
                     </Draggable>

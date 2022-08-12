@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import io from "socket.io-client";
 import GlobalStyle from "./styles/GlobalStyle";
 import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import List from "./components/List";
-import { useEffect } from "react";
+import * as S from "./Style";
 
 const App = () => {
   const socket = io.connect("http://localhost:4000");
@@ -53,7 +53,13 @@ const App = () => {
         const [remove] = sourceItems.splice(result.source.index, 1);
         //도착 컬럼 아이템에 삽입
         destItems.splice(result.destination.index, 0, remove);
-
+        socket.emit(
+          "toOntherColumn",
+          result.source.droppableId,
+          sourceItems,
+          result.destination.droppableId,
+          destItems
+        );
         setColumns({
           ...columns,
           [result.source.droppableId]: {
@@ -74,7 +80,7 @@ const App = () => {
 
         const [remove] = copiedItems.splice(result.source.index, 1);
         copiedItems.splice(result.destination.index, 0, remove);
-        socket.emit("message", result.source.droppableId, copiedItems);
+        socket.emit("defaultEvent", result.source.droppableId, copiedItems);
         setColumns({
           ...columns,
           [result.source.droppableId]: {
@@ -96,7 +102,7 @@ const App = () => {
         text: "Text",
       };
       const copiedItems = [...columns[key].items, newItem];
-      socket.emit("message", key, copiedItems);
+      socket.emit("defaultEvent", key, copiedItems);
       setColumns({
         ...columns,
         [key]: {
@@ -114,7 +120,7 @@ const App = () => {
       //삭제하고자 하는 아이템이 속해있는 칼럼의 아이템 리스트
       const copiedItems = [...columns[key].items];
       copiedItems.splice(index, 1);
-      socket.emit("message", key, copiedItems);
+      socket.emit("defaultEvent", key, copiedItems);
       setColumns({
         ...columns,
         [key]: {
@@ -127,7 +133,23 @@ const App = () => {
   );
 
   useEffect(() => {
-    socket.on("message", (key, copiedItems) => {
+    socket.on(
+      "toOntherColumn",
+      (sourceId, sourceItem, destinationId, destinationItems) => {
+        setColumns({
+          ...columns,
+          [sourceId]: {
+            ...columns[sourceId],
+            items: sourceItem,
+          },
+          [destinationId]: {
+            ...columns[destinationId],
+            items: destinationItems,
+          },
+        });
+      }
+    );
+    socket.on("defaultEvent", (key, copiedItems) => {
       setColumns({
         ...columns,
         [key]: {
@@ -141,9 +163,7 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      <div
-        style={{ display: "flex", justifyContent: "center", height: "100%" }}
-      >
+      <S.Container>
         <DragDropContext
           onDragEnd={(result) => reorder(result, columns, setColumns)}
         >
@@ -153,7 +173,7 @@ const App = () => {
             deleteItem={deleteItem}
           ></List>
         </DragDropContext>
-      </div>
+      </S.Container>
     </>
   );
 };

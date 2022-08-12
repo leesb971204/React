@@ -21,6 +21,6 @@ export const DraggableStyles = styled.div`
   min-height: 50px;
   color: white;
 `;
-export const AddButton = styled.button`
+export const Button = styled.button`
   float: right;
 `;
