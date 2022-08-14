@@ -10,7 +10,6 @@ const io = socketIo(server, {
     methods: ["GET", "POST"],
   },
 });
-
 io.on("connection", (socket) => {
   socket.on("defaultEvent", (key, copiedItems) => {
     io.emit("defaultEvent", key, copiedItems);

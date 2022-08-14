@@ -3,11 +3,12 @@ import io from "socket.io-client";
 import GlobalStyle from "./styles/GlobalStyle";
 import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
-import List from "./components/List";
+import List from "./components/List/List";
 import * as S from "./Style";
+import User from "./components/User/User";
 
 const App = () => {
-  const socket = io.connect("http://localhost:4000");
+  const socket = io("http://localhost:4000");
   const items = [
     { id: "1", title: "Test1", text: "Test1" },
     { id: "2", title: "Test2", text: "Test2" },
@@ -164,6 +165,7 @@ const App = () => {
     <>
       <GlobalStyle />
       <S.Container>
+        <User></User>
         <DragDropContext
           onDragEnd={(result) => reorder(result, columns, setColumns)}
         >
