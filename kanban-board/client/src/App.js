@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import GlobalStyle from "./styles/GlobalStyle";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -9,6 +9,13 @@ import User from "./components/User/User";
 
 const App = () => {
   const socket = io("http://localhost:4000");
+  const [userList, setUserList] = useState([]);
+  //고유 아이디(rgb값 랜덤으로 생성)
+  const num = useRef([
+    Math.floor(Math.random() * 255),
+    Math.floor(Math.random() * 255),
+    Math.floor(Math.random() * 255),
+  ]);
   const items = [
     { id: "1", title: "Test1", text: "Test1" },
     { id: "2", title: "Test2", text: "Test2" },
@@ -133,6 +140,28 @@ const App = () => {
     [socket, columns]
   );
 
+  //최초 접속시
+  useEffect(() => {
+    socket.emit("join", num.current);
+    socket.on("join", (data) => {
+      setUserList(
+        Array.from(data).filter(
+          (x) => JSON.stringify(x) !== JSON.stringify(num.current)
+        )
+      );
+    });
+  }, []);
+  //접속 종료시
+  useEffect(() => {
+    socket.on("left", (data) => {
+      setUserList(
+        Array.from(data).filter(
+          (x) => JSON.stringify(x) !== JSON.stringify(num.current)
+        )
+      );
+    });
+  }, [socket]);
+  //아이템 변화 발생시
   useEffect(() => {
     socket.on(
       "toOntherColumn",
@@ -164,8 +193,8 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
+      <User userList={userList}></User>
       <S.Container>
-        <User></User>
         <DragDropContext
           onDragEnd={(result) => reorder(result, columns, setColumns)}
         >
