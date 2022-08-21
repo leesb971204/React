@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import React, { useCallback, useState } from "react";
 import io from "socket.io-client";
 import GlobalStyle from "./styles/GlobalStyle";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -9,13 +9,6 @@ import * as S from "./Style";
 export const socket = io("http://localhost:4000");
 
 const App = () => {
-  const [userList, setUserList] = useState([]);
-  //고유 아이디(rgb값 랜덤으로 생성)
-  const num = useRef([
-    Math.floor(Math.random() * 255),
-    Math.floor(Math.random() * 255),
-    Math.floor(Math.random() * 255),
-  ]);
   const items = [
     { id: "1", title: "Test1", text: "Test1" },
     { id: "2", title: "Test2", text: "Test2" },
@@ -98,60 +91,10 @@ const App = () => {
     }
   }, []);
 
-  //최초 접속시
-  useEffect(() => {
-    socket.emit("join", num.current);
-    socket.on("join", (data) => {
-      setUserList(
-        Array.from(data).filter(
-          (x) => JSON.stringify(x) !== JSON.stringify(num.current)
-        )
-      );
-    });
-  }, []);
-  //접속 종료시
-  useEffect(() => {
-    socket.on("left", (data) => {
-      setUserList(
-        Array.from(data).filter(
-          (x) => JSON.stringify(x) !== JSON.stringify(num.current)
-        )
-      );
-    });
-  });
-  //아이템 변화 발생시
-  useEffect(() => {
-    socket.on(
-      "toOntherColumn",
-      (sourceId, sourceItem, destinationId, destinationItems) => {
-        setColumns({
-          ...columns,
-          [sourceId]: {
-            ...columns[sourceId],
-            items: sourceItem,
-          },
-          [destinationId]: {
-            ...columns[destinationId],
-            items: destinationItems,
-          },
-        });
-      }
-    );
-    socket.on("defaultEvent", (key, copiedItems) => {
-      setColumns({
-        ...columns,
-        [key]: {
-          ...columns[key],
-          items: copiedItems,
-        },
-      });
-    });
-  }, [columns]);
-
   return (
     <>
       <GlobalStyle />
-      <User userList={userList}></User>
+      <User socket={socket}></User>
       <S.Container>
         <DragDropContext
           onDragEnd={(result) => reorder(result, columns, setColumns)}

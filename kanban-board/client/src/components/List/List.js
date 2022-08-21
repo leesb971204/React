@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import * as S from "./Style";
@@ -44,6 +44,35 @@ const List = ({ socket, columns, setColumns }) => {
     },
     [columns, setColumns, socket]
   );
+  //아이템 변화 발생시
+  useEffect(() => {
+    socket.on(
+      "toOntherColumn",
+      (sourceId, sourceItem, destinationId, destinationItems) => {
+        setColumns({
+          ...columns,
+          [sourceId]: {
+            ...columns[sourceId],
+            items: sourceItem,
+          },
+          [destinationId]: {
+            ...columns[destinationId],
+            items: destinationItems,
+          },
+        });
+      }
+    );
+    socket.on("defaultEvent", (key, copiedItems) => {
+      setColumns({
+        ...columns,
+        [key]: {
+          ...columns[key],
+          items: copiedItems,
+        },
+      });
+    });
+  }, [columns, setColumns, socket]);
+
   return Object.entries(columns).map(([key, value]) => {
     return (
       <S.Container key={key}>
