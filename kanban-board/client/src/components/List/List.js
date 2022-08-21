@@ -1,9 +1,11 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
+import { SocketContext } from "../../context";
 import * as S from "./Style";
 
-const List = ({ socket, columns, setColumns }) => {
+const List = ({ columns, setColumns }) => {
+  const socket = useContext(SocketContext);
   //아이템 생성 함수
   const addItem = useCallback(
     (key) => {

@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { SocketContext } from "../../context";
 import * as S from "./Style";
 
-const User = ({ socket }) => {
+const User = () => {
+  const socket = useContext(SocketContext);
   const [userList, setUserList] = useState([]);
   //고유 아이디(rgb값 랜덤으로 생성)
   const num = useRef([
