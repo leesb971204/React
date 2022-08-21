@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { SocketContext } from "../../context";
 import List from "../List/List";
+import * as S from "./Style";
 
 const Contents = () => {
   const socket = useContext(SocketContext);
@@ -90,11 +91,13 @@ const Contents = () => {
     [socket]
   );
   return (
-    <DragDropContext
-      onDragEnd={(result) => reorder(result, columns, setColumns)}
-    >
-      <List columns={columns} setColumns={setColumns}></List>
-    </DragDropContext>
+    <S.Container>
+      <DragDropContext
+        onDragEnd={(result) => reorder(result, columns, setColumns)}
+      >
+        <List columns={columns} setColumns={setColumns}></List>
+      </DragDropContext>
+    </S.Container>
   );
 };
 

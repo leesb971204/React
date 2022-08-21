@@ -9,7 +9,6 @@ const List = ({ columns, setColumns }) => {
   //아이템 생성 함수
   const addItem = useCallback(
     (key) => {
-      console.log("add");
       const newItem = {
         id: uuidv4(),
         title: "New Item",
@@ -31,7 +30,6 @@ const List = ({ columns, setColumns }) => {
   //아이템 삭제 함수
   const deleteItem = useCallback(
     (key, index) => {
-      console.log("del");
       //삭제하고자 하는 아이템이 속해있는 칼럼의 아이템 리스트
       const copiedItems = [...columns[key].items];
       copiedItems.splice(index, 1);
