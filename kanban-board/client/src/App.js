@@ -2,10 +2,9 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import GlobalStyle from "./styles/GlobalStyle";
 import { DragDropContext } from "react-beautiful-dnd";
-import { v4 as uuidv4 } from "uuid";
 import List from "./components/List/List";
-import * as S from "./Style";
 import User from "./components/User/User";
+import * as S from "./Style";
 
 export const socket = io("http://localhost:4000");
 
@@ -99,45 +98,6 @@ const App = () => {
     }
   }, []);
 
-  //아이템 생성 함수
-  const addItem = useCallback(
-    (key) => {
-      const newItem = {
-        id: uuidv4(),
-        title: "New Item",
-        text: "Text",
-      };
-      const copiedItems = [...columns[key].items, newItem];
-      socket.emit("defaultEvent", key, copiedItems);
-      setColumns({
-        ...columns,
-        [key]: {
-          ...columns[key],
-          items: copiedItems,
-        },
-      });
-    },
-    [columns]
-  );
-
-  //아이템 삭제 함수
-  const deleteItem = useCallback(
-    (key, index) => {
-      //삭제하고자 하는 아이템이 속해있는 칼럼의 아이템 리스트
-      const copiedItems = [...columns[key].items];
-      copiedItems.splice(index, 1);
-      socket.emit("defaultEvent", key, copiedItems);
-      setColumns({
-        ...columns,
-        [key]: {
-          ...columns[key],
-          items: copiedItems,
-        },
-      });
-    },
-    [columns]
-  );
-
   //최초 접속시
   useEffect(() => {
     socket.emit("join", num.current);
@@ -197,9 +157,9 @@ const App = () => {
           onDragEnd={(result) => reorder(result, columns, setColumns)}
         >
           <List
+            socket={socket}
             columns={columns}
-            addItem={addItem}
-            deleteItem={deleteItem}
+            setColumns={setColumns}
           ></List>
         </DragDropContext>
       </S.Container>
