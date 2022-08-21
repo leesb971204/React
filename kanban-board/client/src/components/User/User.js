@@ -34,8 +34,10 @@ const User = () => {
   });
   return (
     <S.Container>
-      {userList.map((item) => (
-        <S.Contents color={item}>{item}</S.Contents>
+      {userList.map((item, index) => (
+        <S.Contents key={index} color={item}>
+          {item}
+        </S.Contents>
       ))}
     </S.Container>
   );
