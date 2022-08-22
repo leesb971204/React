@@ -15,6 +15,7 @@ const userList = [];
 
 io.on("connection", (socket) => {
   let user;
+
   socket.on("join", (data) => {
     if (user) {
       return false;
@@ -24,9 +25,11 @@ io.on("connection", (socket) => {
     io.emit("join", userList);
     console.log(userList);
   });
+
   socket.on("defaultEvent", (key, copiedItems) => {
     io.emit("defaultEvent", key, copiedItems);
   });
+
   socket.on(
     "toOntherColumn",
     (sourceId, sourceItem, destinationId, destinationItem) => {
@@ -39,12 +42,12 @@ io.on("connection", (socket) => {
       );
     }
   );
+
   socket.on("disconnect", () => {
     if (!user) {
       return false;
     }
     userList.splice(userList.indexOf(user), 1);
-    console.log(userList);
     io.emit("left", userList);
   });
 });

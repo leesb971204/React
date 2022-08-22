@@ -15,6 +15,7 @@ const User = () => {
   useEffect(() => {
     socket.emit("join", num.current);
     socket.on("join", (data) => {
+      //자신을 제외한 접속한 유저 렌더링
       setUserList(
         Array.from(data).filter(
           (x) => JSON.stringify(x) !== JSON.stringify(num.current)

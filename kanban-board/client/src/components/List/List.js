@@ -1,11 +1,17 @@
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import { SocketContext } from "../../context";
+import useInput from "../../hooks/useInput";
 import * as S from "./Style";
 
 const List = ({ columns, setColumns }) => {
   const socket = useContext(SocketContext);
+  const [editmode, setEditmode] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const newTitle = useInput();
+  const newText = useInput();
+
   //아이템 생성 함수
   const addItem = useCallback(
     (key) => {
@@ -43,6 +49,28 @@ const List = ({ columns, setColumns }) => {
       });
     },
     [columns, setColumns, socket]
+  );
+
+  //아이템 수정 함수
+  const editItem = useCallback(
+    (key, index, item, newTitle, newText) => {
+      const copiedItems = [...columns[key].items];
+      copiedItems.splice(index, 1, {
+        ...item,
+        title: newTitle,
+        text: newText,
+      });
+      socket.emit("defaultEvent", key, copiedItems);
+      setColumns({
+        ...columns,
+        [key]: {
+          ...columns[key],
+          items: copiedItems,
+        },
+      });
+      setEditmode(!editmode);
+    },
+    [columns, setColumns, socket, editmode]
   );
   //아이템 변화 발생시
   useEffect(() => {
@@ -102,10 +130,37 @@ const List = ({ columns, setColumns }) => {
                           ref={provided.innerRef}
                           snapshot={snapshot}
                         >
-                          <div>{item.title}</div>
-                          {item.text}
+                          {editmode && item.id === editId ? (
+                            <div>
+                              <input {...newTitle} />
+                              <input {...newText} />
+                            </div>
+                          ) : (
+                            <>
+                              <div>{item.title}</div>
+                              <div>{item.text}</div>
+                            </>
+                          )}
+
                           <S.Button onClick={() => deleteItem(key, index)}>
                             X
+                          </S.Button>
+                          <S.Button
+                            onClick={() =>
+                              editmode
+                                ? editItem(
+                                    key,
+                                    index,
+                                    item,
+                                    newTitle.value,
+                                    newText.value
+                                  ) &
+                                  newTitle.onReset() &
+                                  newText.onReset()
+                                : setEditmode(!editmode) & setEditId(item.id)
+                            }
+                          >
+                            E
                           </S.Button>
                         </S.DraggableStyles>
                       )}
