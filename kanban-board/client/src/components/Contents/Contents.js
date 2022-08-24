@@ -31,7 +31,7 @@ const Contents = () => {
   };
   const [columns, setColumns] = useState(columnsList);
 
-  //결과 재정렬 함수
+  /** 아이템 재정렬 함수*/
   const reorder = useCallback(
     (result, columns, setColumns) => {
       //범위 밖으로 떨구면 아무것도 안함

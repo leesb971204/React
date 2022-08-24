@@ -12,7 +12,10 @@ const List = ({ columns, setColumns }) => {
   const newTitle = useInput();
   const newText = useInput();
 
-  //아이템 생성 함수
+  /**
+   * 아이템 생성 함수
+   * @key 추가할 아이템이 속한 칼럼의 key
+   */
   const addItem = useCallback(
     (key) => {
       const newItem = {
@@ -33,7 +36,11 @@ const List = ({ columns, setColumns }) => {
     [columns, setColumns, socket]
   );
 
-  //아이템 삭제 함수
+  /**
+   * 아이템 삭제 함수
+   * @key 삭제할 아이템이 속한 칼럼의 key
+   * @index 삭제할 아이템의 인덱스
+   */
   const deleteItem = useCallback(
     (key, index) => {
       //삭제하고자 하는 아이템이 속해있는 칼럼의 아이템 리스트
