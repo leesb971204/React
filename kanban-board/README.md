@@ -75,5 +75,5 @@ Styled-Components
 ## 사용 방법
 
 ```
-git clone -> client, server 경로에서 각각 $ npm i  -> npm run start
+git clone -> client, server 경로에서 각각 $npm i  -> \client > $npm run start & \server > $node app.js
 ```
