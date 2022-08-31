@@ -115,70 +115,65 @@ const List = ({ columns, setColumns }) => {
           <S.H2>{value.name}</S.H2>
           <S.Button onClick={() => addItem(key)}>+</S.Button>
         </header>
-        <main>
-          <Droppable droppableId={key}>
-            {(provided, snapshot) => {
-              return (
-                <S.DroppableStyles
-                  snapshot={snapshot}
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {value.items.map((item, index) => (
-                    <Draggable
-                      key={item.id}
-                      draggableId={item.id}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <S.DraggableStyles
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-                          ref={provided.innerRef}
-                          snapshot={snapshot}
-                        >
-                          {editmode && item.id === editId ? (
-                            <div>
-                              <input {...newTitle} />
-                              <input {...newText} />
-                            </div>
-                          ) : (
-                            <>
-                              <div>{item.title}</div>
-                              <div>{item.text}</div>
-                            </>
-                          )}
 
-                          <S.Button onClick={() => deleteItem(key, index)}>
-                            X
-                          </S.Button>
-                          <S.Button
-                            onClick={() =>
-                              editmode
-                                ? editItem(
-                                    key,
-                                    index,
-                                    item,
-                                    newTitle.value,
-                                    newText.value
-                                  ) &
-                                  newTitle.onReset() &
-                                  newText.onReset()
-                                : setEditmode(!editmode) & setEditId(item.id)
-                            }
-                          >
-                            E
-                          </S.Button>
-                        </S.DraggableStyles>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </S.DroppableStyles>
-              );
-            }}
-          </Droppable>
-        </main>
+        <Droppable droppableId={key}>
+          {(provided, snapshot) => {
+            return (
+              <S.DroppableStyles
+                snapshot={snapshot}
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {value.items.map((item, index) => (
+                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                    {(provided) => (
+                      <S.DraggableStyles
+                        {...provided.dragHandleProps}
+                        {...provided.draggableProps}
+                        ref={provided.innerRef}
+                        snapshot={snapshot}
+                      >
+                        {editmode && item.id === editId ? (
+                          <div>
+                            <input {...newTitle} />
+                            <input {...newText} />
+                          </div>
+                        ) : (
+                          <>
+                            <div>{item.title}</div>
+                            <div>{item.text}</div>
+                          </>
+                        )}
+
+                        <S.Button onClick={() => deleteItem(key, index)}>
+                          X
+                        </S.Button>
+                        <S.Button
+                          onClick={() =>
+                            editmode
+                              ? editItem(
+                                  key,
+                                  index,
+                                  item,
+                                  newTitle.value,
+                                  newText.value
+                                ) &
+                                newTitle.onReset() &
+                                newText.onReset()
+                              : setEditmode(!editmode) & setEditId(item.id)
+                          }
+                        >
+                          E
+                        </S.Button>
+                      </S.DraggableStyles>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </S.DroppableStyles>
+            );
+          }}
+        </Droppable>
       </S.Container>
     );
   });
