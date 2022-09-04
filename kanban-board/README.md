@@ -24,6 +24,7 @@ Styled-Components
 ## 프로젝트 주요 기능
 
 <br>
+
 ### 최초 접속
 <br>
 <img width="654" alt="스크린샷 2021-11-08 오전 9 21 00" src="https://user-images.githubusercontent.com/75251270/187060144-2149108e-4e4a-4cf7-a24c-389bb99b3a73.PNG">
