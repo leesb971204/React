@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { SocketContext } from "../../context";
 import List from "../List/List";
@@ -6,31 +6,13 @@ import * as S from "./Style";
 
 const Contents = () => {
   const socket = useContext(SocketContext);
-  const items = [
-    { id: "1", title: "Test1", text: "Test1" },
-    { id: "2", title: "Test2", text: "Test2" },
-  ];
+  const [columns, setColumns] = useState({});
 
-  const columnsList = {
-    Todo: {
-      name: "Todo",
-      items: items,
-    },
-    InProgress: {
-      name: "In Progress",
-      items: [],
-    },
-    Done: {
-      name: "Done",
-      items: [],
-    },
-    Notes: {
-      name: "Notes & Reference",
-      items: [],
-    },
-  };
-  const [columns, setColumns] = useState(columnsList);
-
+  useEffect(() => {
+    socket.on("test", (columnsList) => {
+      setColumns(columnsList);
+    });
+  }, []);
   /** 아이템 재정렬 함수*/
   const reorder = useCallback(
     (result, columns, setColumns) => {

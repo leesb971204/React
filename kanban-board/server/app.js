@@ -12,7 +12,24 @@ const io = socketIo(server, {
 });
 
 const userList = [];
-
+const columnsList = {
+  Todo: {
+    name: "Todo",
+    items: [],
+  },
+  InProgress: {
+    name: "In Progress",
+    items: [],
+  },
+  Done: {
+    name: "Done",
+    items: [],
+  },
+  Notes: {
+    name: "Notes & Reference",
+    items: [],
+  },
+};
 io.on("connection", (socket) => {
   let user;
 
@@ -23,6 +40,7 @@ io.on("connection", (socket) => {
     user = data;
     userList.push(user);
     io.emit("join", userList);
+    io.emit("test", columnsList);
     console.log(userList);
   });
 
