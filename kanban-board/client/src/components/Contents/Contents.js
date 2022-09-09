@@ -9,13 +9,13 @@ const Contents = () => {
   const [columns, setColumns] = useState({});
 
   useEffect(() => {
-    socket.on("test", (columnsList) => {
+    socket.on("show", (columnsList) => {
       setColumns(columnsList);
     });
   }, []);
   /** 아이템 재정렬 함수*/
   const reorder = useCallback(
-    (result, columns, setColumns) => {
+    (result, columns) => {
       //범위 밖으로 떨구면 아무것도 안함
       if (!result.destination) return;
 
@@ -40,17 +40,6 @@ const Contents = () => {
           result.destination.droppableId,
           destItems
         );
-        setColumns({
-          ...columns,
-          [result.source.droppableId]: {
-            ...sourceColumn,
-            items: sourceItems,
-          },
-          [result.destination.droppableId]: {
-            ...destColumn,
-            items: destItems,
-          },
-        });
       }
 
       // 같은 컬럼에서 순서만 바꿀 때
@@ -61,13 +50,6 @@ const Contents = () => {
         const [remove] = copiedItems.splice(result.source.index, 1);
         copiedItems.splice(result.destination.index, 0, remove);
         socket.emit("defaultEvent", result.source.droppableId, copiedItems);
-        setColumns({
-          ...columns,
-          [result.source.droppableId]: {
-            ...column,
-            items: copiedItems,
-          },
-        });
       }
     },
     [socket]

@@ -40,11 +40,11 @@ io.on("connection", (socket) => {
     user = data;
     userList.push(user);
     io.emit("join", userList);
-    io.emit("test", columnsList);
+    io.emit("show", columnsList);
     console.log(userList);
   });
 
-  socket.on("addItem", (key, copiedItems) => {
+  socket.on("defaultEvent", (key, copiedItems) => {
     columnsList = {
       ...columnsList,
       [key]: {
@@ -52,29 +52,24 @@ io.on("connection", (socket) => {
         items: copiedItems,
       },
     };
-    io.emit("addItem", columnsList);
+    io.emit("defaultEvent", columnsList);
   });
 
-  socket.on("deleteItem", (key, copiedItems) => {
-    columnsList = {
-      ...columnsList,
-      [key]: {
-        ...columnsList[key],
-        items: copiedItems,
-      },
-    };
-    io.emit("deleteItem", columnsList);
-  });
   socket.on(
     "toOntherColumn",
     (sourceId, sourceItem, destinationId, destinationItem) => {
-      io.emit(
-        "toOntherColumn",
-        sourceId,
-        sourceItem,
-        destinationId,
-        destinationItem
-      );
+      columnsList = {
+        ...columnsList,
+        [sourceId]: {
+          ...columnsList[sourceId],
+          items: sourceItem,
+        },
+        [destinationId]: {
+          ...columnsList[destinationId],
+          items: destinationItem,
+        },
+      };
+      io.emit("toOntherColumn", columnsList);
     }
   );
 
