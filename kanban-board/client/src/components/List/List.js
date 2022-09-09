@@ -24,13 +24,9 @@ const List = ({ columns, setColumns }) => {
         text: "Text",
       };
       const copiedItems = [...columns[key].items, newItem];
-      socket.emit("defaultEvent", key, copiedItems);
-      setColumns({
-        ...columns,
-        [key]: {
-          ...columns[key],
-          items: copiedItems,
-        },
+      socket.emit("addItem", key, copiedItems);
+      socket.on("addItem", (columnsList) => {
+        setColumns({ ...columnsList });
       });
     },
     [columns, setColumns, socket]
@@ -46,13 +42,9 @@ const List = ({ columns, setColumns }) => {
       //삭제하고자 하는 아이템이 속해있는 칼럼의 아이템 리스트
       const copiedItems = [...columns[key].items];
       copiedItems.splice(index, 1);
-      socket.emit("defaultEvent", key, copiedItems);
-      setColumns({
-        ...columns,
-        [key]: {
-          ...columns[key],
-          items: copiedItems,
-        },
+      socket.emit("deleteItem", key, copiedItems);
+      socket.on("deleteItem", (columnsList) => {
+        setColumns({ ...columnsList });
       });
     },
     [columns, setColumns, socket]

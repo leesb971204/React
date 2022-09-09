@@ -12,7 +12,7 @@ const io = socketIo(server, {
 });
 
 const userList = [];
-const columnsList = {
+let columnsList = {
   Todo: {
     name: "Todo",
     items: [],
@@ -44,10 +44,27 @@ io.on("connection", (socket) => {
     console.log(userList);
   });
 
-  socket.on("defaultEvent", (key, copiedItems) => {
-    io.emit("defaultEvent", key, copiedItems);
+  socket.on("addItem", (key, copiedItems) => {
+    columnsList = {
+      ...columnsList,
+      [key]: {
+        ...columnsList[key],
+        items: copiedItems,
+      },
+    };
+    io.emit("addItem", columnsList);
   });
 
+  socket.on("deleteItem", (key, copiedItems) => {
+    columnsList = {
+      ...columnsList,
+      [key]: {
+        ...columnsList[key],
+        items: copiedItems,
+      },
+    };
+    io.emit("deleteItem", columnsList);
+  });
   socket.on(
     "toOntherColumn",
     (sourceId, sourceItem, destinationId, destinationItem) => {
