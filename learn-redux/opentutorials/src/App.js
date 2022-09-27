@@ -54,6 +54,7 @@ function Left3(props) {
     </div>
   );
 }
+
 function Right1(props) {
   return (
     <div>

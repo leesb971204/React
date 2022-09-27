@@ -1,16 +1,20 @@
 import React from "react";
-import { useSelector, useDispatch, shallowEqual, connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { useSelector, useDispatch } from "react-redux";
 import Counter from "../components/Counter";
-import { increase, decerase, setDiff } from "../modules/counter";
+import { setDiff, increase, decrease } from "../modules/counterSlice";
 
-const CounterContainer = ({
-  number,
-  diff,
-  onIncrease,
-  onDecrease,
-  onSetDiff,
-}) => {
+function CounterContainer() {
+  const { number, diff } = useSelector((state) => ({
+    number: state.counter.number,
+    diff: state.counter.diff,
+  }));
+
+  const dispatch = useDispatch();
+
+  const onIncrease = () => dispatch(increase(diff));
+  const onDecrease = () => dispatch(decrease(diff));
+  const onSetDiff = (diff) => dispatch(setDiff(diff));
+
   return (
     <Counter
       number={number}
@@ -18,23 +22,8 @@ const CounterContainer = ({
       onIncrease={onIncrease}
       onDecrease={onDecrease}
       onSetDiff={onSetDiff}
-    ></Counter>
+    />
   );
-};
+}
 
-const mapStateToProps = (state) => ({
-  number: state.counter.number,
-  diff: state.counter.diff,
-});
-
-const mapDispatchToProps = (dispatch) => {
-  bindActionCreators(
-    {
-      increase,
-      decerase,
-      setDiff,
-    },
-    dispatch
-  );
-};
-export default connect(mapStateToProps, mapDispatchToProps)(CounterContainer);
+export default CounterContainer;
