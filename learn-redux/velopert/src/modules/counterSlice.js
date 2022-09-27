@@ -41,12 +41,12 @@ const counterSlice = createSlice({
     setDiff: (state, action) => {
       state.diff = action.payload;
     },
-    increase: (state, action) => {
-      state.number = state.number + action.payload;
+    increase: (state) => {
+      state.number += state.diff;
     },
 
-    decrease: (state, action) => {
-      state.number = state.number - action.payload;
+    decrease: (state) => {
+      state.number -= state.diff;
     },
   },
 });
