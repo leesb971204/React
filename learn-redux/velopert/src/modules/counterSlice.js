@@ -35,20 +35,28 @@ import { createSlice } from "@reduxjs/toolkit";
 //   }
 // }
 const counterSlice = createSlice({
-  name: "counterSlice",
+  name: "counter",
   initialState: { number: 0, diff: 1 },
   reducers: {
-    setDiff: (state, action) => {
-      state.diff = action.payload;
+    setDiff: {
+      reducer: (state, action) => {
+        state.diff = action.payload;
+      },
     },
-    increase: (state) => {
-      state.number += state.diff;
+    increase: {
+      reducer: (state) => {
+        state.number += state.diff;
+      },
     },
 
-    decrease: (state) => {
-      state.number -= state.diff;
+    decrease: {
+      reducer: (state) => {
+        state.number -= state.diff;
+      },
     },
   },
 });
-export default counterSlice;
+console.log(counterSlice);
+export default counterSlice.reducer;
+
 export const { setDiff, increase, decrease } = counterSlice.actions;
